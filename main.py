@@ -1,0 +1,137 @@
+"""FastAPI + Google ADK Server Wrapper for AskFinance Agent (Cloud Run & Gemini Enterprise).
+
+Exposes standard ADK endpoints (`/run`, `/run_sse`, `/list-apps`), A2A v1.0 protocol
+routes (`/a2a/ask_finance_agent`, `/.well-known/agent-card.json`), `/health`, and `POST /warm`
+to pre-warm SQLite/FTS5/Vector indices and model routing before live demos.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import time
+import warnings
+from pathlib import Path
+from typing import Any
+
+import uvicorn
+from fastapi import FastAPI, Request
+from google.adk.cli.fast_api import get_fast_api_app
+
+from ask_finance_agent.config.settings import get_settings
+from ask_finance_agent.memory.persistent_store import get_memory_service
+from ask_finance_agent.observability.structured_logger import get_structured_logger
+from ask_finance_agent.observability.tracing import configure_opentelemetry_tracing
+from ask_finance_agent.orchestration.model_router import get_model_router
+from ask_finance_canvas_agent.streaming_executor import install_canvas_streaming_progress
+
+warnings.filterwarnings("ignore", message=r".*\[EXPERIMENTAL\].*", category=UserWarning)
+
+ROOT_DIR = Path(__file__).resolve().parent
+DEFAULT_A2A_AGENT = os.getenv("DEFAULT_A2A_AGENT", "ask_finance_agent").strip() or "ask_finance_agent"
+AGENT_CARD_PATH = ROOT_DIR / DEFAULT_A2A_AGENT / "agent.json"
+settings = get_settings()
+logger = get_structured_logger("ask_finance_agent.server")
+
+configure_opentelemetry_tracing(
+    project_id=settings.google_cloud_project,
+    enable_cloud_trace=settings.enable_cloud_trace,
+)
+
+app: FastAPI = get_fast_api_app(
+    agents_dir=str(ROOT_DIR),
+    allow_origins=["*"],
+    web=os.getenv("ADK_ENABLE_WEB_UI", "true").lower() == "true",
+    a2a=os.getenv("ADK_ENABLE_A2A", "true").lower() == "true",
+    auto_create_session=True,
+    otel_to_cloud=settings.enable_cloud_trace,
+)
+
+
+# Replace ADK's minimal default /health route with our AgentOps health metadata route
+app.router.routes = [
+    r for r in app.router.routes if getattr(r, "path", None) != "/health"
+]
+
+# Install real-time A2UI working status streaming ONLY on /a2a/ask_finance_canvas_agent
+install_canvas_streaming_progress(app)
+
+
+def _resolve_dynamic_agent_card(request: Request) -> dict[str, Any]:
+    """Loads `ask_finance_agent/agent.json` and stamps the live Cloud Run A2A RPC URL."""
+    card_data: dict[str, Any] = json.loads(AGENT_CARD_PATH.read_text(encoding="utf-8"))
+    base_url = (
+        os.getenv("PUBLIC_SERVICE_URL")
+        or str(request.base_url)
+    ).rstrip("/")
+    # Respect Cloud Run X-Forwarded-Proto HTTPS termination
+    if request.headers.get("x-forwarded-proto") == "https" and base_url.startswith("http://"):
+        base_url = "https://" + base_url[len("http://") :]
+    rpc_url = f"{base_url}/a2a/{DEFAULT_A2A_AGENT}"
+
+    interfaces = card_data.get("supportedInterfaces")
+    if isinstance(interfaces, list) and interfaces:
+        interfaces[0]["url"] = rpc_url
+    else:
+        card_data["supportedInterfaces"] = [
+            {
+                "url": rpc_url,
+                "protocolBinding": "JSONRPC",
+                "protocolVersion": "1.0",
+            }
+        ]
+    return card_data
+
+
+@app.get("/.well-known/agent-card.json", tags=["a2a"])
+@app.get("/.well-known/agent.json", tags=["a2a"])
+async def root_agent_card_discovery(request: Request) -> dict[str, Any]:
+    """Root-level A2A Agent Card discovery alias for Gemini Enterprise registration."""
+    return _resolve_dynamic_agent_card(request)
+
+
+@app.get("/health", tags=["agentops"])
+async def health_check() -> dict[str, Any]:
+    """Liveness and readiness probe for Google Cloud Run."""
+    return {
+        "status": "ok",
+        "service": "ask-finance-agent",
+        "project_id": settings.google_cloud_project,
+        "region": settings.google_cloud_location,
+        "cloud_run_region": settings.cloud_run_region,
+        "a2a_endpoint": f"/a2a/{DEFAULT_A2A_AGENT}",
+        "a2ui_version": "v0.9",
+    }
+
+
+@app.post("/warm", tags=["agentops"])
+async def prewarm_runtime() -> dict[str, Any]:
+    """Pre-warms the SQLite/Vector RAG store, model router, and ADK orchestrator."""
+    start_ts = time.perf_counter()
+    mem = get_memory_service()
+    sample_hits = mem.search_knowledge_base("KB0010108 INV-902605 Net 30 submission date", top_k=2)
+    router = get_model_router()
+    flash_check = router.route_query("Check status of INV-902605")
+    pro_check = router.route_query("BioData Registry Online Second Payment Reminder 923469 923104 923288")
+    elapsed_ms = round((time.perf_counter() - start_ts) * 1000.0, 2)
+
+    logger.info(
+        "Runtime pre-warm completed for Gemini Enterprise live demo",
+        warm_latency_ms=elapsed_ms,
+        kb_hits=len(sample_hits),
+        flash_model=flash_check.selected_model,
+        pro_model=pro_check.selected_model,
+    )
+    return {
+        "status": "warmed",
+        "project_id": settings.google_cloud_project,
+        "warm_latency_ms": elapsed_ms,
+        "indexed_kb_hits_verified": len(sample_hits),
+        "a2a_ready": AGENT_CARD_PATH.is_file(),
+        "models_ready": [flash_check.selected_model, pro_check.selected_model],
+    }
+
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", "8080"))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)

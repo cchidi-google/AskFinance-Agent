@@ -1,0 +1,48 @@
+{
+  "name": "ask_finance_canvas_orchestrator",
+  "description": "AskFinance Agent",
+  "supportedInterfaces": [
+    {
+      "url": "http://localhost:8080/a2a/ask_finance_canvas_agent",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false,
+    "extensions": [
+      {
+        "uri": "https://a2ui.org/a2a-extension/a2ui/v0.9",
+        "description": "Gemini Enterprise Full-Screen App-in-Canvas A2UI v0.9 Workspace",
+        "params": {
+          "supportedCatalogIds": [
+            "https://www.gstatic.com/vertexaisearch/a2ui/v0_9/gemini_enterprise_composite_catalog.json"
+          ]
+        }
+      }
+    ]
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "skills": [
+    {
+      "id": "launch_askfinance_agent",
+      "name": "🎧 Launch AskFinance Agent",
+      "description": "Opens the AskFinance Agent interactive Canvas.",
+      "tags": [
+        "a2ui",
+        "canvas",
+        "helpdesk"
+      ],
+      "examples": [
+        "🎧 Launch AskFinance Agent"
+      ]
+    }
+  ]
+}

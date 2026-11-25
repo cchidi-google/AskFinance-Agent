@@ -1,0 +1,317 @@
+[
+  {
+    "eval_id": "EVAL-INV-01",
+    "scenario_id": "INV-01",
+    "query": "What is the status of invoice INV-900101 for AquaFlow Utilities Ltd?",
+    "identifier": "INV-900101",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Pending Approval",
+    "expected_kb": "KB0010101",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-02",
+    "scenario_id": "INV-02",
+    "query": "When will approved invoice 9106076 from Outback SatCom Pty Ltd be paid?",
+    "identifier": "9106076",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Approved",
+    "expected_kb": "KB0010108",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-03",
+    "scenario_id": "INV-03",
+    "query": "How do we reassign Non-PO invoice INV-900103 to Elena Rostova?",
+    "identifier": "INV-900103",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Pending Action",
+    "expected_kb": "KB0010103",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-04",
+    "scenario_id": "INV-04",
+    "query": "How does Jordan Taylor code Non-PO invoice INV-900104 in Coupa?",
+    "identifier": "INV-900104",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Pending Action (Uncoded)",
+    "expected_kb": "KB0010101",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-05",
+    "scenario_id": "INV-05",
+    "query": "Why was invoice 907666 from RheinClean Facility GmbH rejected with TaxEngineCheck?",
+    "identifier": "907666",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Rejected (TaxEngineCheck)",
+    "expected_kb": "KB0010104",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-06",
+    "scenario_id": "INV-06",
+    "query": "Utility invoice 9000100020003000106 from Pacific Grid Energy Corp is missing in Coupa.",
+    "identifier": "9000100020003000106",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Not Found in Coupa",
+    "expected_kb": "KB0010102",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-07",
+    "scenario_id": "INV-07",
+    "query": "NovaTech Leasing Services emailed PDF invoice 4900101 and it is not in Coupa.",
+    "identifier": "4900101",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Not Found in Coupa",
+    "expected_kb": "KB0010102",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-08",
+    "scenario_id": "INV-08",
+    "query": "Check voided status of invoice 790108 from Metro Survey Associates.",
+    "identifier": "790108",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Voided (Offset by Credit Memo REV790108)",
+    "expected_kb": "KB0010104",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-09",
+    "scenario_id": "INV-09",
+    "query": "How do I delegate invoice approval responsibilities while on vacation?",
+    "identifier": "INV-09",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Self-Service Configuration",
+    "expected_kb": "KB0010107",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-10",
+    "scenario_id": "INV-10",
+    "query": "Invoice 690110 from HydroGeo Software LLC is disputed because it was uploaded before PO #ES800110.",
+    "identifier": "690110",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Disputed (Pre-PO Upload)",
+    "expected_kb": "KB0010105",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-11",
+    "scenario_id": "INV-11",
+    "query": "Titan Industrial Services billed the wrong amount ($22,772) on approved invoice 902158.",
+    "identifier": "902158",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Approved",
+    "expected_kb": "KB0010105",
+    "expected_surface_prefix": "gbs-invoice-status-",
+    "requires_hitl_ticket": true
+  },
+  {
+    "eval_id": "EVAL-INV-12",
+    "scenario_id": "INV-12",
+    "query": "Crestline Builders invoice 900218 exceeds tolerance on PO #8001120.",
+    "identifier": "900218",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Disputed (Price/Tolerance Variance)",
+    "expected_kb": "KB0010105",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-13",
+    "scenario_id": "INV-13",
+    "query": "Invoice 90330426 from Boreal Systems Group is stuck in Draft status.",
+    "identifier": "90330426",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Draft",
+    "expected_kb": "KB0010101",
+    "expected_surface_prefix": "gbs-invoice-status-",
+    "requires_hitl_ticket": true
+  },
+  {
+    "eval_id": "EVAL-INV-14",
+    "scenario_id": "INV-14",
+    "query": "Invoices 690782 and 690792 from EnviroPack Supplies Ltd are Pending Receipt.",
+    "identifier": "690782",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Pending Receipt (690782, 690792); Disputed (692782)",
+    "expected_kb": "KB0010106",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-15",
+    "scenario_id": "INV-15",
+    "query": "How do I find and view actionable invoices in Coupa (sample 910117)?",
+    "identifier": "910117",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Self-Service Navigation",
+    "expected_kb": "KB0010101",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-16",
+    "scenario_id": "INV-16",
+    "query": "How do I change my Coupa notification preferences?",
+    "identifier": "INV-16",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Self-Service Configuration",
+    "expected_kb": "KB0010107",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-INV-17",
+    "scenario_id": "INV-17",
+    "query": "How do I create a custom invoice view and export to Excel in Coupa?",
+    "identifier": "INV-17",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Self-Service Reporting",
+    "expected_kb": "KB0010107",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-PAY-01",
+    "scenario_id": "PAY-01",
+    "query": "Why is invoice INV-902605 for FieldSync Ops Ltd due on 14 Jan 2026 instead of 30 Dec?",
+    "identifier": "INV-902605",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Approved",
+    "expected_kb": "KB0010108",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-PAY-02",
+    "scenario_id": "PAY-02",
+    "query": "Confirm payment EFT details for CloudCore Systems invoice INV-905082.",
+    "identifier": "INV-905082",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Approved",
+    "expected_kb": "KB0010108",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-PAY-03",
+    "scenario_id": "PAY-03",
+    "query": "BioData Registry Online sent a Second Payment Reminder Notice for 923469, 923104, and 923288 threatening an account freeze.",
+    "identifier": "923469",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "923469: Approved | 923104: Pending Approval | 923288: Pending Receipt",
+    "expected_kb": "KB0010106",
+    "expected_surface_prefix": "gbs-biodata-reconciliation-canvas",
+    "requires_hitl_ticket": true
+  },
+  {
+    "eval_id": "EVAL-PAY-04",
+    "scenario_id": "PAY-04",
+    "query": "FleetRent Commercial UK needs an official PDF remittance advice for FLEX-900412.",
+    "identifier": "FLEX-900412",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Approved",
+    "expected_kb": "KB0010108",
+    "expected_surface_prefix": "gbs-invoice-status-",
+    "requires_hitl_ticket": true
+  },
+  {
+    "eval_id": "EVAL-PAY-05",
+    "scenario_id": "PAY-05",
+    "query": "External email from taylor.brooks@veritaslabs-group.example.com asking for bank details on returned payment 9001948880 (invoice 9458874037).",
+    "identifier": "9458874037",
+    "inquirer_email": "taylor.brooks@veritaslabs-group.example.com",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Approved (Vendor Marked DNU)",
+    "expected_kb": "KB0010109",
+    "expected_surface_prefix": "gbs-invoice-status-",
+    "expected_confidence_max": 79,
+    "requires_hitl_ticket": true
+  },
+  {
+    "eval_id": "EVAL-ACC-01",
+    "scenario_id": "ACC-01",
+    "query": "Check Coupa Buyer role request IAM-REQ-90412.",
+    "identifier": "IAM-REQ-90412",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Request via Enterprise IAM (KB0010201)",
+    "expected_kb": "KB0010201",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-PROC-01",
+    "scenario_id": "PROC-01",
+    "query": "How do I amend PO #12345 or subcontractor PO #US800301?",
+    "identifier": "PO #12345",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Regional Amendment Matrix (KB0010202)",
+    "expected_kb": "KB0010202",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-PROC-02",
+    "scenario_id": "PROC-02",
+    "query": "Explain requisition buying channels REQ-BUY-2026 and the quantity-based PO receiving rule.",
+    "identifier": "REQ-BUY-2026",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Buying Channel Matrix (KB0010203)",
+    "expected_kb": "KB0010203",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-SUP-01",
+    "scenario_id": "SUP-01",
+    "query": "How do we onboard Nordic Marine Survey AS (SIM-NEW-4401)?",
+    "identifier": "SIM-NEW-4401",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "SIM Onboarding Triage (KB0010204)",
+    "expected_kb": "KB0010204",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-SUP-02",
+    "scenario_id": "SUP-02",
+    "query": "Check Coupa SIM onboarding status SIM-REQ-88410 for TerraPulse Analytics Inc.",
+    "identifier": "SIM-REQ-88410",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Stage 3 of 3 In Progress (Pending TPRM Cyber Questionnaire)",
+    "expected_kb": "KB0010204",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-SUP-03",
+    "scenario_id": "SUP-03",
+    "query": "Status of bank account update SUP-UPD-55109 for ClearStream Services LLC.",
+    "identifier": "SUP-UPD-55109",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Pending Out-of-Band Voice Positive Confirmation",
+    "expected_kb": "KB0010205",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-EXP-01",
+    "scenario_id": "EXP-01",
+    "query": "Help with Enterprise Expense Portal missing receipt affidavit EXP-992014.",
+    "identifier": "EXP-992014",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "Self-Service Expense Portal Checklist (KB0010206)",
+    "expected_kb": "KB0010206",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-CSP-01",
+    "scenario_id": "CSP-01",
+    "query": "HarborBridge Logistics Ltd missing CSP invite CSP-INVITE-7721 and inactive project PRJ-10420.",
+    "identifier": "CSP-INVITE-7721",
+    "expected_tool": "lookup_coupa_oracle_invoice_record",
+    "expected_coupa_status": "CSP Invite & Inactive Project PRJ-10420 (KB0010207)",
+    "expected_kb": "KB0010207",
+    "expected_surface_prefix": "gbs-invoice-status-"
+  },
+  {
+    "eval_id": "EVAL-OOS-SERVICENOW",
+    "scenario_id": "OUT_OF_SCOPE_HITL",
+    "query": "I have an ad-hoc cross-border intercompany withholding tax audit question for Brazil not in Coupa.",
+    "identifier": "BR-TAX-AUDIT-9999",
+    "expected_tool": "stage_servicenow_case_intake_form",
+    "expected_surface_prefix": "gbs-servicenow-intake-form"
+  }
+]

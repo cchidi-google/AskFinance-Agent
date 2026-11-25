@@ -1,0 +1,12 @@
+#!include:.gitignore
+.git
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+tests/
+eval/
+docs/
+terraform/
+*.db
