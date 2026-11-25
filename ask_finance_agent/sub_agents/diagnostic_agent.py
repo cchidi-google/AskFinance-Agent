@@ -1,4 +1,4 @@
-"""Sub-Agent 1: Invoice & Payment Diagnostic Specialist (`gemini-2.5-flash`)."""
+"""Sub-Agent 1: Invoice & Payment Diagnostic Specialist (`gemini-3.8-flash`)."""
 
 from __future__ import annotations
 

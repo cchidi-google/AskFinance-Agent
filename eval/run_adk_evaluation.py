@@ -2,7 +2,7 @@
 
 Evaluates all 31 scenarios in `eval/golden_dataset.json` across:
 1. Cross-system Coupa + Oracle accuracy (`INV-01`..`INV-17`, `PAY-01`..`PAY-05`, `ACC-01`..`CSP-01`)
-2. Strategic Model Routing (`gemini-2.5-flash` vs `gemini-4-argon`)
+2. Strategic Model Routing (`gemini-3.8-flash` vs `gemini-4-argon`)
 3. Self-Evaluation Security Guardrails (`PAY-05` `Confidence = 62 < 80` + bank masking)
 4. Out-of-scope guided error recovery -> 2-step HITL ServiceNow Case Creation (`CS9940120`)
 5. Optional live `google.adk.evaluation.agent_evaluator.AgentEvaluator` integration (`--live-adk`)

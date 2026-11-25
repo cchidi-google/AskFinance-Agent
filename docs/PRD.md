@@ -41,7 +41,7 @@ Every module in the repository maps directly to the **19 code-evidence criteria 
 | | **2.3 Persistent Session State** (5) | Connects to a persistent database, vector store, or Vertex AI Search to retrieve info or manage history across turns. | Hybrid `PersistentGbsMemoryService` supporting **SQLite + Cosine Vector / FTS5 Index** (`data/finance_memory.db` for zero-config local/evaluator execution) and **Vertex AI Search / Firestore / `VertexAiSessionService` & `VertexAiMemoryBankService`** in `your-gcp-project-id`. | `ask_finance_agent/memory/persistent_store.py` |
 | | **2.4 Async Memory Operations** (5) | Expensive memory generation and consolidation coded as background or async tasks to prevent UI blocking. | Uses `asyncio.create_task()` (`consolidate_session_memory_async`, `upsert_turn_embeddings_async`) in `after_model_callback` so memory summarization and vector indexing run non-blockingly in the background. | `ask_finance_agent/memory/async_worker.py`, `ask_finance_agent/callbacks.py` |
 | **3. Orchestration & Logic (20 pts)** | **3.1 Multi-Agent Patterns** (5) | Proven design patterns (Coordinator, Sequential) rather than monolithic agents in ADK. | **Coordinator + Specialist Sub-Agents + `SequentialAgent` Pipeline** in ADK: `ask_finance_orchestrator` (Root Coordinator) delegates to `invoice_payment_diagnostic_agent`, `procurement_kb_advisory_agent`, and `escalation_hitl_specialist_agent` (which includes a `SequentialAgent` for multi-invoice reconciliation + ticket staging). | `ask_finance_agent/agent.py`, `ask_finance_agent/sub_agents/*.py` |
-| | **3.2 Strategic Model Routing** (5) | Routes specific requests to the most appropriate model (e.g., Flash for fast tasks, Pro for planning). | `StrategicModelRouter` routes fast deterministic lookups, slot-filling, and KB navigation to **`gemini-2.5-flash`** and routes complex multi-invoice legal hold reconciliation (`PAY-03`), security domain mismatch analysis (`PAY-05`), and out-of-scope escalation planning to **`gemini-4-argon`**. | `ask_finance_agent/orchestration/model_router.py` |
+| | **3.2 Strategic Model Routing** (5) | Routes specific requests to the most appropriate model (e.g., Flash for fast tasks, Pro for planning). | `StrategicModelRouter` routes fast deterministic lookups, slot-filling, and KB navigation to **`gemini-3.8-flash`** and routes complex multi-invoice legal hold reconciliation (`PAY-03`), security domain mismatch analysis (`PAY-05`), and out-of-scope escalation planning to **`gemini-4-argon`**. | `ask_finance_agent/orchestration/model_router.py` |
 | | **3.3 Guardrails & Policy Plugins** (5) | Security and evaluation guardrails (self-eval) implemented via Google Cloud / ADK / agentic tech. | Custom ADK `GbsPolicyGuardrailPlugin(BasePlugin)` + `SelfEvaluationGuardrail` enforcing: (1) Vertex AI Safety Settings / Model Armor checks, (2) **Self-Eval Confidence Scoring** (`confidence_score < 80` on external domain mismatch `PAY-05` triggers bank digit masking), and (3) Read-Only ERP mutation prevention. | `ask_finance_agent/plugins/policy_plugin.py`, `ask_finance_agent/plugins/a2ui_canvas_plugin.py` |
 | | **3.4 Human-in-the-Loop Hooks** (5) | High-stakes actions include explicit code stops requiring human confirmation before execution. | Hard `before_tool_callback` HITL gate (`enforce_hitl_confirmation_gate`) on `submit_confirmed_servicenow_case` and `submit_urgent_payment_acceleration`. Execution halts unless `tool_context.state["hitl_user_confirmed"] == True` (set when the user submits the A2UI Case Intake Form). | `ask_finance_agent/callbacks.py`, `ask_finance_agent/tools/servicenow_tools.py` |
 | **4. Observability & Tracing (20 pts)** | **4.1 Structured JSON Logging** (5) | Utilizes structured logging libraries to capture rich metadata rather than simple prints. | Zero `print()` calls in agent code; `StructuredJsonLogger` (`python-json-logger` + `google-cloud-logging`) emits JSON logs with `trace_id`, `span_id`, `session_id`, `agent_name`, `tool_name`, `latency_ms`, and `confidence_score`. | `ask_finance_agent/observability/structured_logger.py` |
@@ -75,8 +75,8 @@ flowchart LR
         FastAPI["ADK FastAPI / Agent Runtime Endpoint\n(A2A / OpenAPI Spec + IAM Auth)"]
         Plugin["A2uiCanvasPlugin & Policy Callbacks\n• before_model: Compaction + A2UI Action Parser\n• before_tool: HITL Gate + Intent Logger\n• after_model: Inject A2UI Canvas/Card Parts"]
         Coord["Coordinator: ask_finance_orchestrator\n(Strategic Model Router)"]
-        Sub1["Sub-Agent 1: Invoice & Payment Diagnostic\n(gemini-2.5-flash)"]
-        Sub2["Sub-Agent 2: Procurement & KB Advisory\n(gemini-2.5-flash)"]
+        Sub1["Sub-Agent 1: Invoice & Payment Diagnostic\n(gemini-3.8-flash)"]
+        Sub2["Sub-Agent 2: Procurement & KB Advisory\n(gemini-3.8-flash)"]
         Sub3["Sub-Agent 3: Escalation & HITL Specialist\n(gemini-4-argon + SequentialAgent)"]
         Mem[("Hybrid Persistent Memory & Sanitized RAG\n• SQLite + Vector/FTS5 (gbs_source_of_truth_data.md)\n• Vertex AI Session / Memory Bank\n• OpenTelemetry + Cloud Trace + PII Scrubber")]
     end
@@ -425,8 +425,8 @@ ask-finance-agent/                              # <--- PUBLIC ROOT GITHUB REPOSI
 │   │   └── secret_manager.py               # Google Cloud Secret Manager (`google-cloud-secret-manager`) client
 │   ├── sub_agents/
 │   │   ├── __init__.py
-│   │   ├── diagnostic_agent.py             # `invoice_payment_diagnostic_agent` (gemini-2.5-flash)
-│   │   ├── kb_advisory_agent.py            # `procurement_kb_advisory_agent` (gemini-2.5-flash)
+│   │   ├── diagnostic_agent.py             # `invoice_payment_diagnostic_agent` (gemini-3.8-flash)
+│   │   ├── kb_advisory_agent.py            # `procurement_kb_advisory_agent` (gemini-3.8-flash)
 │   │   └── escalation_hitl_agent.py        # `escalation_hitl_specialist_agent` (gemini-4-argon + SequentialAgent)
 │   ├── orchestration/
 │   │   ├── __init__.py

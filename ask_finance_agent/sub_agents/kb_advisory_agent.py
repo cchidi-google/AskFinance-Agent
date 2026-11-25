@@ -1,4 +1,4 @@
-"""Sub-Agent 2: Procurement & Coupa Knowledge Base Advisory Specialist (`gemini-2.5-flash`)."""
+"""Sub-Agent 2: Procurement & Coupa Knowledge Base Advisory Specialist (`gemini-3.8-flash`)."""
 
 from __future__ import annotations
 

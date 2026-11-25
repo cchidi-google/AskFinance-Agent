@@ -35,8 +35,8 @@ flowchart LR
         FastAPI["FastAPI + ADK + A2A v1.0 Server (main.py)\n/a2a/ask_finance_agent, /.well-known/agent-card.json\n/run, /run_sse, /health, /warm"]
         Plugins["ADK Plugins & Lifecycle Callbacks\n• A2uiCanvasPlugin (<a2a_datapart_json>)\n• GbsPolicyGuardrailPlugin (Confidence < 80 Mask)\n• before_tool_callback Hard HITL Gate"]
         Coord["Coordinator: ask_finance_orchestrator\n(Dynamic Flash / Gemini 4 Argon Routing)"]
-        Diag["invoice_payment_diagnostic_agent\n(gemini-2.5-flash)"]
-        KB["procurement_kb_advisory_agent\n(gemini-2.5-flash)"]
+        Diag["invoice_payment_diagnostic_agent\n(gemini-3.8-flash)"]
+        KB["procurement_kb_advisory_agent\n(gemini-3.8-flash)"]
         Esc["escalation_hitl_specialist_agent\n(gemini-4-argon + SequentialAgent)"]
         Mem[("PersistentGbsMemoryService\n• SQLite + FTS5 + Cosine Vector Index\n• Async Consolidation Workers\n• OpenTelemetry + Cloud Trace + PII Scrubber")]
     end
@@ -70,7 +70,7 @@ flowchart LR
 | | **2.3 Persistent Session State** | `PersistentGbsMemoryService` (SQLite + FTS5 + Cosine Vector DB seeded from `gbs_source_of_truth_data.md` + `VertexAiSessionService` / `VertexAiMemoryBankService`) | `ask_finance_agent/memory/persistent_store.py` |
 | | **2.4 Async Memory Operations** | Non-blocking `asyncio.create_task()` background consolidation (`schedule_async_memory_consolidation`, `consolidate_session_memory_async`) | `ask_finance_agent/memory/async_worker.py`, `ask_finance_agent/callbacks.py` |
 | **3. Orchestration & Logic (20 pts)** | **3.1 Multi-Agent Patterns** | `ask_finance_orchestrator` Coordinator + 3 Specialist Sub-Agents + `reconciliation_to_escalation_pipeline` (`SequentialAgent`) | `ask_finance_agent/agent.py`, `ask_finance_agent/sub_agents/*.py` |
-| | **3.2 Strategic Model Routing** | `StrategicModelRouter` (`gemini-2.5-flash` for routine lookups/KBs; `gemini-4-argon` for orchestration, `PAY-03` legal holds, `PAY-05` security mismatches, `INV-11` holds) | `ask_finance_agent/orchestration/model_router.py` |
+| | **3.2 Strategic Model Routing** | `StrategicModelRouter` (`gemini-3.8-flash` for routine lookups/KBs; `gemini-4-argon` for orchestration, `PAY-03` legal holds, `PAY-05` security mismatches, `INV-11` holds) | `ask_finance_agent/orchestration/model_router.py` |
 | | **3.3 Guardrails & Policy Plugins** | `GbsPolicyGuardrailPlugin(BasePlugin)` + `SelfEvaluationGuardrail` (`PAY-05` sets `confidence_score = 62 < 80`, masks bank digits, blocks direct ERP writes) | `ask_finance_agent/plugins/policy_plugin.py`, `ask_finance_agent/plugins/a2ui_canvas_plugin.py` |
 | | **3.4 Human-in-the-Loop Hooks** | `enforce_hitl_confirmation_gate` in `before_tool_callback` blocking `submit_confirmed_servicenow_case` until `state["hitl_user_confirmed"] == True` | `ask_finance_agent/callbacks.py`, `ask_finance_agent/tools/servicenow_tools.py` |
 | **4. Observability & Tracing (20 pts)** | **4.1 Structured JSON Logging** | `StructuredJsonLogger` (`python-json-logger` + `google-cloud-logging`) with zero `print()` statements in agent package | `ask_finance_agent/observability/structured_logger.py` |

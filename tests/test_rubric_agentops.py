@@ -132,9 +132,9 @@ async def test_rubric_category_3_multi_agent_routing_and_policy_guardrails() -> 
     assert len(adk_app.plugins) == 2
 
     # 3.2 Strategic Model Routing (Flash vs Gemini 4 Argon)
-    router = StrategicModelRouter(flash_model="gemini-2.5-flash", pro_model="gemini-4-argon")
+    router = StrategicModelRouter(flash_model="gemini-3.8-flash", pro_model="gemini-4-argon")
     fast_decision = router.route_query("Check payment date for INV-902605")
-    assert fast_decision.selected_model == "gemini-2.5-flash"
+    assert fast_decision.selected_model == "gemini-3.8-flash"
 
     pro_legal = router.route_query(
         "Second Payment Reminder Notice from BioData Registry Online for 923469, 923104, and 923288"

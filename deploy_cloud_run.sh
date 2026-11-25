@@ -11,7 +11,7 @@ fi
 PROJECT_ID="${GOOGLE_CLOUD_PROJECT:-your-gcp-project-id}"
 CLOUD_RUN_REGION="${CLOUD_RUN_REGION:-us-central1}"
 VERTEX_LOCATION="${GOOGLE_CLOUD_LOCATION:-global}"
-FLASH_MODEL="${GEMINI_FLASH_MODEL:-gemini-3.5-flash}"
+FLASH_MODEL="${GEMINI_FLASH_MODEL:-gemini-3.8-flash}"
 PRO_MODEL="${GEMINI_PRO_MODEL:-gemini-4-argon}"
 SERVICE_NAME="${SERVICE_NAME:-ask-finance-agent}"
 

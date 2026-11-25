@@ -38,7 +38,7 @@ if isinstance(card.get("supportedInterfaces"), list) and card["supportedInterfac
 body = {
     "displayName": "AskFinance Agent",
     "description": (
-        "Multi-agent ADK assistant (Gemini 4 Argon + Gemini 2.5 Flash) for Supplier Invoice Support, "
+        "Multi-agent ADK assistant (Gemini 4 Argon + Gemini 3.8 Flash) for Supplier Invoice Support, "
         "Payment Diagnostics, Coupa KB Guidance, and 2-step HITL ServiceNow Case Creation with A2UI v0.9 Canvas."
     ),
     "a2aAgentDefinition": {

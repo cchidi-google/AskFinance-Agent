@@ -2,7 +2,7 @@
 
 Dynamically classifies incoming user requests and routes:
 - Routine single-invoice lookups, missing-slot clarification, utility exemptions,
-  and Coupa KB navigation to **`gemini-2.5-flash`** for low-latency responsiveness.
+  and Coupa KB navigation to **`gemini-3.8-flash`** for low-latency responsiveness.
 - Complex multi-invoice legal hold / account freeze statements (`PAY-03`), external
   email domain mismatches & `DNU` vendor fraud checks (`PAY-05`), approved wrong-amount
   Oracle payment holds (`INV-11`), and multi-step out-of-scope escalations to
@@ -42,7 +42,7 @@ class ModelRoutingDecision:
 
 
 class StrategicModelRouter:
-    """Routes user queries between `gemini-2.5-flash` and `gemini-4-argon`."""
+    """Routes user queries between `gemini-3.8-flash` and `gemini-4-argon`."""
 
     def __init__(
         self,

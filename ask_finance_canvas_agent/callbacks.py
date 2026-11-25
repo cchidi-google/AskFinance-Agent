@@ -407,7 +407,7 @@ def canvas_after_model_callback(
     get_intent_outcome_tracker().log_outcome(
         execution_id=exec_id,
         agent_name=agent_name,
-        tool_name=f"llm_generate:{state.get('routed_model', 'gemini-2.5-flash') if state else 'gemini-2.5-flash'}",
+        tool_name=f"llm_generate:{state.get('routed_model', 'gemini-3.8-flash') if state else 'gemini-3.8-flash'}",
         status="SUCCESS",
         latency_ms=latency_ms,
         a2ui_surface_id=APP_CANVAS_SURFACE_ID,

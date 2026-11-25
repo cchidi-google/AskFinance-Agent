@@ -48,7 +48,7 @@ class GbsAgentSettings(BaseSettings):
         description="Whether google-genai / ADK uses Vertex AI endpoints.",
     )
     gemini_flash_model: str = Field(
-        default="gemini-2.5-flash",
+        default="gemini-3.8-flash",
         alias="GEMINI_FLASH_MODEL",
         description="Fast low-latency Gemini model for deterministic diagnostics and KB guidance.",
     )

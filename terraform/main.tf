@@ -156,7 +156,7 @@ resource "google_cloud_run_v2_service" "ask_gbs_service" {
       }
       env {
         name  = "GEMINI_FLASH_MODEL"
-        value = "gemini-2.5-flash"
+        value = "gemini-3.8-flash"
       }
       env {
         name  = "GEMINI_PRO_MODEL"

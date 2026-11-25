@@ -117,7 +117,7 @@ def test_adk_quoted_agent_context_is_never_displayed_on_subagent_handoff() -> No
     state: dict[str, Any] = {}
     # Step 1: Root orchestrator receives genuine user prompt
     req_root = SimpleNamespace(
-        model="gemini-2.5-flash",
+        model="gemini-3.8-flash",
         contents=[
             types.Content(
                 role="user",
@@ -131,7 +131,7 @@ def test_adk_quoted_agent_context_is_never_displayed_on_subagent_handoff() -> No
 
     # Step 2: Sub-agent receives ADK synthetic `For context:` message at the end of `contents`
     req_sub = SimpleNamespace(
-        model="gemini-2.5-flash",
+        model="gemini-3.8-flash",
         contents=[
             types.Content(
                 role="user",
